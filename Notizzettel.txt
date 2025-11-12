@@ -1,0 +1,10 @@
+// ====================================
+
+Seminar "C++ Moderne Design Pattern"
+
+Peter Loos
+
+Guten Morgen
+
+// ====================================
+
