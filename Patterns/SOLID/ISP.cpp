@@ -10,6 +10,7 @@ namespace InterfaceSegregationPrinciple01
 {
     class Document {};
 
+    // Single Responsibility:
     class IMachine {
     public:
         virtual void print(Document& doc) = 0;

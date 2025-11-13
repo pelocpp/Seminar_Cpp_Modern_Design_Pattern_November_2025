@@ -8,3 +8,527 @@ Guten Morgen
 
 // ====================================
 // ====================================
+
+30+ Jahre : SW - Entwicklung // Training
+
+Pascal, C/C++, Java, C#, Mobile Progr. (Android) // Python
+
+Back-to-the-Roots: C/C++
+
+======================================
+
+Tooling
+
+a) Visual Studio
+
+b) Unterlagen:
+
+   Github.com / pelocpp
+
+   https://github.com/pelocpp/cpp_design_patterns
+
+==============================================
+
+== Erwartungen
+== Was muss drin sein ...
+== Überblick
+== Background // andere Sprachen ...
+
+== C / Entscheidungen / Palette von Pattern
+
+   Emdedded / Sensorik
+
+   Frontend / Qt  
+
+==============================================
+
+Vorbemerkung:
+
+Wahrscheinlichkeit:  Hmm, mit Gewalt Pattern einsetzen ....
+
+a) kennen lernen
+
+b) Problem: sich erinnern // da war doch was ...
+
+==============================================
+
+Fragen:
+
+C++: Classic C++
+
+C++: (C++11) Modern C++
+
+C++ ==> komplex: Was verwenden wir von C++ ????
+
+    Das, was wir verstehen :)
+
+==============================================
+
+ToDo-Liste:
+
+== Virtueller Basisklassendestruktor
+
+== std::unique //   std::shared_ptr
+
+
+==============================================
+
+Was ist ein Entwurfsmuster?
+
+Gebrauchsanweisung // bewährt.
+
+==> Idiom: Sind einfacher // kleiner ...
+
+==============================================
+
+Wie vermittle ich ein Idiom:
+
+i)   Bildchen // UML
+
+ii)  Konzeptionelle Beispiel:
+
+     Umsetzung des Patterns - minimalistisch.
+
+iii) Real-World Beispiel:
+
+==============================================
+
+
+
+Grundlagen:
+
+Historisch entstande:
+
+ 1994   // Java
+
+ Modernisiert:  C++
+
+
+ Historisch ==> C++
+
+ C++ Grundlagen:  Interface // Abstract Class
+
+
+ =========================================
+
+ Interfaces:
+
+ Wozu ????
+
+ Abstrakte Klasse:  Unvollständige Klasse
+
+ Wann virtual und wann nicht ??????????????
+
+ a)
+
+        virtual void paint()                 // (virtual) method with implementation
+        { 
+        }
+
+    class Button
+    {
+    public:
+        // Teilfunktionalität
+        virtual void paint()                 // (virtual) method with implementation
+        { 
+           // hier sollte alles "gemalt" werden,
+           // was für ALLE Buttons relevant ist: Border zB // Background
+        }
+
+        // Fensterüberschrift
+        virtual std::string caption () = 0;
+        
+        Rectangle size () { return Rectangle(10, 20); }
+    }
+
+    class ColoredButton : Button
+    {
+         //   void painttt() override {
+         //   }
+
+        // Verfeinerung der Teilfunktionalität
+        void paint() override               // (virtual) method with implementation
+        { 
+            // Häufig:
+            Button::paint(); // die Methode desselben Names
+                             // in der Vaterklasse aufrufen
+        }
+
+        // verdecken: das ist schlechter Stil !!!!!!!!!
+        virtual Rectangle size () { return Rectangle(10, 20); }
+    }
+
+    class BlackWhiteButton : Button
+
+
+Frage:
+
+Beobachtung:
+
+Es wird eine virtuelle Mehthode überschrieben,
+und in dieser wird etwas ganz anderes gemacht :)
+
+==>  Hmm, da ist die ist-ein Beziehung verletzt.
+
+Smell // Code Smell
+
+===========================================================
+
+Vererbung:
+
+Klasse:  class // Member Variablen // Methoden  
+
+Wann setzen wir in unseren Programmen Vererbung ein ?????
+
+Beispiel:
+
+Klasse Rectangle 
+Klasse ColoredRectangle
+
+Ein farbiges Rechteck ist eine Art von Rechteck
+
+Ein farbiges Rechteck ist ein Rechteck.
+
+Beziehungen // Relationsships:
+
+ist-ein // is-a Relationsship
+
+------------------------------------------
+
+Klasse Point 
+Klasse Line
+
+Ein Punkt und eine Linie sind beides Formen,
+Ein Punkt ist keine Linie
+
+Eine Linie wird aus Punkten gebildet.
+Eine Linie hat einen Anfangs- und Endpunkt // hat zwei Punkte .
+
+a) Ein Punkt ist eine Linie: Nein.
+b) Eine Linie ist ein Punkt: Nein
+
+/ class Line : public Point
+
+
+2. Beziehung: has-a // hat-ein  Beziehung:
+
+class Line
+{
+    Point m_begin;
+    Point m_end;
+    ...
+}
+
+
+Matrix // LinearEquation
+
+class Matrix : public LinearEquation
+
+class LinearEquation
+{
+    Matrix m_data;
+}
+
+
+Abstrakte Methoden bewirken ein einheitliches AUssehen
+von einer ganzen Hierarchie von Klassen.
+
+=========================================================
+
+Hierarchie: Vererbung.  
+
+Häufig // weniger häufig.
+
+Antwort: Häufig.
+
+Sinnvoll:  Haben diese Klassen / Objekte ein
+           ähnliches / gemeinsames Aussehen ???
+
+Vererbung: Stärke:
+
+Code wird wiederverwendet:
+
+    "paint" in der Vaterklasse: Wird von allen Kindklassen verwendet.
+
+Vererbung nicht "sklavisch" einsetzen:
+
+Die Hat-Ein Beziehung kann manchmal einfacher sein.
+
+
+
+Keyword 'override' // Von C# übernommen
+
+// =============================================================
+
+Idiome:
+
+ „Separation of Concerns”  ===> 
+
+ Lose Kopplung // Enge Kopplung
+
+=======================================================
+
+Adapter:
+
+Ermöglicht die Interaktion von Objekten mit inkompatiblen Schnittstellen.
+
+Datenformat:
+
+XML
+JSON
+
+==> Handgestrickte Lösung.
+
+Hübsche Lösung.
+
+==========================================================
+
+Thema Pointer:
+
+Klassisch: new / delete
+
+Modern:    Smart Pointer:  std::unique //   std::shared_ptr
+
+class Adapter 
+{
+    Adaptee m_adaptee;   // member  // hat-ein
+
+    // möglicherweise besser:
+    
+    Adaptee* m_adapteePtr;   // member  // hat-ein
+        // new ===> Heap
+
+
+
+
+}
+
+void test()
+{
+    Adapter adapter;    // Stack // lokal
+}
+
+
+Wann Stack
+Wann Heap
+
+Was liegt alles am Stack ???
+
+ALles, was in Methoden // Funktionen LOKAL // innerhalb dieser vereinbart
+wird.
+
+void test()
+{
+    int n;
+    ...
+}
+
+int test()
+{
+    int n;
+    ...
+    return n;
+}
+
+Wofür ist der Stack da ????
+   == lokale Variablen 
+   == Zwischenergebnisse
+   == NICHT: für grössere Objekte  // Qt Widgets
+
+grössere Objekte:
+
+A) globale Variablen
+
+B) Ich hätte gerne ein Objekt, wenn ich es brauche 
+   .... und gebe es wieder frei, wenn ich es NICHT mehr brauche:
+
+
+   new / delete:   dynamisches Objekt
+
+
+std::vector<QtWidget*> containerAllerWidgets;
+
+int test()
+{
+    QtWidget* w;
+
+    w = new QtWidget(...);
+    ...
+
+    containerAllerWidgets.push_back (w);
+    // 
+    return 0;
+}
+
+// ======================================
+
+Wer ist clientCode ???
+
+Nahtstelle:  Client <==> Pattern
+
+// =====================================
+
+Frage: 
+
+Wieweit muss ich mich an die Vorgaben eines Patterns halten ???
+
+Am prinzipiellen Konzept sollte nichts geändert werden.
+
+Details:
+--------
+
+class Adapter : public ITarget
+{
+private:
+    Adaptee* m_adaptee2;  // new / delete
+
+    oder
+
+class Adapter : public ITarget
+{
+private:
+    Adaptee m_adaptee;
+
+
+Frage:  JSON
+
+a) Eine Bibliothek wird benötigt.
+
+b) Mit oder ohne Adapter ???
+
+i) Ohne Adapter: Geht - aber ich habe eine "enge Kopplung" zu dieser Bibliothek:
+
+   a) Name der Klasse
+   b) Methode transform // Parameter
+
+ii) Mit Adapter:
+
+Eine "enge Kopplung" zu dieser Bibliothek:
+
+   a) Name der Klasse
+   b) Methode transform // Parameter
+
+   ABER: All dies ist auf den Adapter LOKAL beschränkt.
+
+Vorteil: Wechsel zu einem anderen JSON-Transformer: 
+
+Einen zweiten Adapter schreiben.
+
+Dieser sollte DASSELBE Interface wie der erste Adapter bedienen.
+
+Setze ist hier ein Pattern ein:
+
+a) das ist KEINE zentrale Stelle von meinem Projekt:
+
+   Wenig Zeit: dann mache es schnell ....
+
+b) Es riecht nach Änderungen / Erweiterungen: zentrale Stelle.
+
+   Dann könnte der Einsatz eines Patters das Leben einfacher machen.
+
+===================================================================
+
+Proxy:
+
+Bereitstellung eines Platzhalters (Stellvertreters) für ein anderes Objekt.
+
+Sinnhaftigkeit:
+
+
+Echten Objekten // Zielobjekt
+
+Stellvertreter davorschalte:
+
+Kontrollmöglichkeiten:
+
+a) Logging ...
+
+b) Zugriffsrechte ...
+
+c) Sogar möglich: Zielmethode wird NICHT aufgerufen ...
+
+
+Entkopplung:  
+
+Schnell: Okay, muss das Zielobjekt um Logging erweitern.
+
+Single Responsibility
+
+// =============================================================
+
+Adapter  
+
+Proxy
+
+// Beide verstecken ein Objekt
+
+// Beide abstrahieren die Methoden eines Zielobjekts über ein Interface
+
+Wann setze ich Adapter ein?
+Wann setze ich Proxy ein?
+
+Adapter:  Umsetzen: Von A nach B  // das ist im Adapter versteckt
+
+Proxy: Eine Möglichkeit: Erweiterung von Methden eines Zielobjekts 
+
+    Zusatzfunktionalität durch ein separates Objekt ergänzen.
+
+Zweite Möglichkeit:
+
+Lazy versus Eager // Cachung
+
+Faul versus Gierig
+
+Zielobjekt: Ist resourcen intensiv  // Bilder
+
+Viewer:
+
+Grossbilddarstellung:  draw
+
+Kleinen Bilder:  Thumbnails ...
+
+Wie kann man nur einen Viewer für viele 1000... Bilder realisieren ????
+
+Mit Proxies, die dann eine on-demand Funktionalität umsetzen.
+
+eager:  gierig :   Synchrones // sofortiges Bereitstellen von Daten
+
+lazy:   bequem :   ASynchrones //  Bereitstellen von Daten, wenn erforderlich.
+
+==================================================================
+
+Beobachtung:  Richtig.
+
+Idee // Hintergrund // Motivation: Sind unterschiedlich.
+
+Unterschied:
+
+Adapter: Die gewünschte Funktionalität (readJSON)
+         ist in einem Interface zu beschreiben.
+
+Proxy:   Es ist das gesamte 'public' Interface eines Zielobjekts 
+         mit einer Schnittstelle zu beschreiben.
+
+Proxy:   Kann verhindern, dass in das Ziel-Objekt gerufen wird.
+
+         Hmm, das sehe ich bei einem Adapter nicht.
+
+
+Frage:
+
+Wie kann ich verhindern, dass Clients DIREKT auf ein RealSubject zugreifen.
+
+a) RealSubject:  Header-File 
+
+b) Objekte verstecken // Klassen verstecken.
+
+i)  Zielobjekt ist NICHT direkt instanziierbar.
+
+ii) Fabrik: Händigen Objekte aus // verstecken aber die Erstellungslogik.
+
+Beispiel:
+
+std::vector
+
+// ==========================================================
+

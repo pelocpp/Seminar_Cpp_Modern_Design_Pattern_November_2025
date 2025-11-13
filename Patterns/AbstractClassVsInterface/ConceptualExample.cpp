@@ -106,11 +106,13 @@ namespace AbstractClassVsInterface {
 
     // =======================================================================
 
-    static Interface* getInterface()
+    static Interface* getInterface()  // Magic
     {
         AnotherConcreteClass* impl = new AnotherConcreteClass();
         // or
         // Interface* impl = new AnotherConcreteClass();
+
+      //  impl->
 
         return impl;
     }
@@ -120,6 +122,12 @@ namespace AbstractClassVsInterface {
     static void test_client_of_interface()
     {
         Interface* ip = getInterface();
+
+       // ICloneable  // gib mir eine Kopie
+
+         //   IEnumerable  // Iterator 
+
+       // ip->
 
         ip->method_first();
 

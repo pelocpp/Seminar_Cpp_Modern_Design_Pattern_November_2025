@@ -56,6 +56,7 @@ class Adapter : public ITarget
 {
 private:
     std::unique_ptr<Adaptee> m_adaptee;
+    Adaptee* m_adaptee2;  // new / delete
 
 public:
     Adapter(std::unique_ptr<Adaptee> adaptee)
@@ -64,7 +65,7 @@ public:
 
     std::string request() const override {
 
-        std::string toReverse{ m_adaptee->specificRequest() };
+        std::string toReverse = m_adaptee->specificRequest();
 
         std::reverse(
             toReverse.begin(),
@@ -81,12 +82,13 @@ public:
 static void clientCode(std::unique_ptr<ITarget> target) {
 
     std::string response{ target->request() };
+
     std::cout << response << std::endl << std::endl;
 }
 
 static void test_conceptual_example_01() {
 
-    std::unique_ptr<Adaptee> adaptee{ std::make_unique<Adaptee>() };
+    std::unique_ptr<Adaptee> adaptee{ std::make_unique<Adaptee>() };   // new
 
     std::unique_ptr<Adapter> adapter{ std::make_unique<Adapter>(std::move(adaptee)) };
 
