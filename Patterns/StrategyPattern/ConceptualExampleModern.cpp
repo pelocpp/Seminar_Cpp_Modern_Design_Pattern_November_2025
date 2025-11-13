@@ -21,7 +21,30 @@ namespace StrategyConceptualExampleModern {
      * In Modern C++ the Strategy Interface may be defined through a std::function type.
      */
 
-    using Strategy = std::function<std::string(const std::vector<std::string>&)>;
+    std::vector<double> numbers;   // Schablonen: ==> Performant
+                                   // Python, JavaScript:
+                                   // Interpretation von Daten zur Laufzeit
+                                   // Overhead, Performanz
+
+    // C++ Antwort auf einen Funktionszeiger
+    using Strategy = std::function < std::string (const std::vector<std::string>& ) >;
+
+    int function(int a, int b) { return 0; }
+
+    std::string function2(const std::vector<std::string>&) { return ""; }
+    
+    void test()
+    {
+        // a la C 
+        int (*pf)(int, int);  // was ist fp: Funktionszeiger // Funktionsadresse
+
+        std::string(*pf2)(const std::vector<std::string>&);  // was ist fp: Funktionszeiger // Funktionsadresse
+
+        pf = & function;
+
+        pf2 = & function2;
+    }
+
 
     /**
      * Concrete strategies implement the algorithm
@@ -86,6 +109,8 @@ namespace StrategyConceptualExampleModern {
          * It can just call this function via the std::function<> object.
          */
     private:
+       // using Strategy = std::function < std::string(const std::vector<std::string>&) >;
+
         Strategy m_strategy;
 
         /**
@@ -95,6 +120,7 @@ namespace StrategyConceptualExampleModern {
     public:
         // c'tor(s), d'tor
         Context(Strategy&& strategy) : m_strategy{ std::move(strategy) } {}
+
         Context(Strategy& strategy) : m_strategy{ strategy } {}
 
         ~Context() {}
@@ -122,7 +148,7 @@ namespace StrategyConceptualExampleModern {
 
             std::println("Context: Sorting data ...");
 
-            std::string result{ m_strategy(someStrings) };
+            std::string result{ m_strategy ( someStrings ) };
 
             std::println("Result: {}", result);
         }
@@ -144,6 +170,54 @@ namespace StrategyConceptualExampleModern {
 
         std::println("Client: Strategy is set to 'Reverse Sorting':");
         context.setStrategy(doAlgorithmB);
+        context.doSomeBusinessLogic();
+
+        // Eine Strategie als Lambda
+        auto doLambdaAlgorithm = [](const std::vector<std::string>& data)
+            {
+                std::string result{};
+
+                std::for_each(
+                    data.begin(),
+                    data.end(),
+                    [&](const std::string& letter) {
+                        result += letter;
+                    }
+                );
+
+                std::sort(
+                    result.begin(),
+                    result.end()
+                );
+
+                return result;
+            };
+
+        std::println("Client: Strategy is set to a  Lambda");
+        context.setStrategy(doLambdaAlgorithm);
+        context.doSomeBusinessLogic();
+
+        // in-place // vor Ort // Modern Style
+        context.setStrategy([](const std::vector<std::string>& data)
+            {
+                std::string result{};
+
+                std::for_each(
+                    data.begin(),
+                    data.end(),
+                    [&](const std::string& letter) {
+                        result += letter;
+                    }
+                );
+
+                std::sort(
+                    result.begin(),
+                    result.end()
+                );
+
+                return result;
+            }
+        );
         context.doSomeBusinessLogic();
     }
 }

@@ -67,11 +67,11 @@ namespace ConceptualExample {
             switch (shapeType)
             {
             case ShapeKind::Rectangle:
-                shapePtr = std::make_shared<Rectangle>();
+                shapePtr = std::make_shared<Rectangle>( /* .... */);
                 break;
 
             case ShapeKind::Square:
-                shapePtr = std::make_shared<Square>();
+                shapePtr = std::make_shared<Square>( /* .... */ );
                 break;
 
             case ShapeKind::Circle:

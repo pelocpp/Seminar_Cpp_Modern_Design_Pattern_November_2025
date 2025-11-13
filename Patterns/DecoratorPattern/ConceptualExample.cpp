@@ -72,7 +72,9 @@ public:
     {}
 
     std::string operation() const override {
+        // vorher:  dekorieren
         std::string parentResult{ DecoratorBase::operation() };
+        // nachher: dekorieren
         std::string decoratedResult{ "ConcreteDecoratorA ( " + parentResult + " )" };
         return decoratedResult;
     }
@@ -219,7 +221,7 @@ void test_conceptual_example_03() {
     std::shared_ptr<IComponent> component{ std::make_shared<ConcreteComponent>() };
 
     // run-time dependent decorator
-    std::shared_ptr<IComponent> decorator;
+    std::shared_ptr<IComponent> decorator;   // empty
 
     if (true)   // <== change 'true' to 'false'
     {

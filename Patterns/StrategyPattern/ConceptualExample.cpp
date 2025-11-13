@@ -107,7 +107,9 @@ namespace StrategyConceptualExample {
          */
 
     private:
+
         std::unique_ptr<StrategyBase> m_strategy;
+        StrategyBase* m_strategy1;
 
         /**
          * Usually, the Context accepts a strategy through the constructor,
@@ -138,6 +140,21 @@ namespace StrategyConceptualExample {
 
             std::println("Context: Sorting data ...");
 
+            // Möglichkeit einer Parametrierung // Austauschs eines Methodenaufrufs
+            // eine Methode injizieren // to inject a method
+            std::string result{ m_strategy->doAlgorithm(someStrings) };
+
+            std::println("Result: {}", result);
+        }
+
+        void doPaint() const
+        {
+            std::vector<std::string> someStrings{ "A", "E", "C", "B", "D" };
+
+            std::println("Context: Sorting data ...");
+
+            // Möglichkeit einer Parametrierung // Austauschs eines Methodenaufrufs
+            // eine Methode injizieren // to inject a method
             std::string result{ m_strategy->doAlgorithm(someStrings) };
 
             std::println("Result: {}", result);

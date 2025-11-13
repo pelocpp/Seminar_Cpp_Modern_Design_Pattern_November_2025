@@ -19,6 +19,8 @@ public:
      * The template method defines the skeleton of an algorithm:
      */
 
+    // Kein Virtual  
+    // // Realisierung, obwohl die eine oder andere gerufene Methode abstrakt ist !!!!
     void TemplateMethod() const
     {
         BaseOperation1();             // may be overriden, but it's not mandatory

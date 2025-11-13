@@ -66,6 +66,10 @@ C++ ==> komplex: Was verwenden wir von C++ ????
 
 ToDo-Liste:
 
+== Rest der Idiome
+
+== Literatur
+
 == Virtueller Basisklassendestruktor
 
 == std::unique //   std::shared_ptr
@@ -531,4 +535,287 @@ Beispiel:
 std::vector
 
 // ==========================================================
+
+Template Method
+---------------
+
+Spielerisch:
+
+Tetris - Spiel:
+
+Eine Reihe von Figuren "kommen von oben nach unten":
+
+7 Figuren:
+
+Beobachtung:  Alle obliegen denselben Regeln.
+
+Ihre Bewegungsmöglichkeiten (links, rechts, unten) sind dieselben.
+
+Pro Figur sind Einzelentscheidungen notwendig - auf Grund des Aussehens der Figur.
+
+==> move : move für alle Figuren : 
+
+   Template Method Pattern.   // Schablonenmethode.
+
+   Eine Schablonenmethode für alle Figuren.
+
+
+Rezept:  Ein an sich immer wiederkehrender, homogener Ablauf ist 
+         an unterschiedlichen Objekten zu vollziehen.
+
+         Diese können mit Überschreiben von Methoden diesen Ablauf modifizieren // vervollständigen.
+
+         Die Schablonenmethde ist unvollständig - in Bezug auf den Aufruf
+         abstrakter Methoden.
+
+         ===> Homogene Struktur.
+
+========================================================
+
+Strategy Pattern:
+-----------------
+
+std::vector<Employees> numbers;
+
+   // Nachname 
+   // Vorname
+   // Geb.Datum
+   // Einstellungsdatum
+   // Personalnummer
+
+std::vector<int> numbers;
+
+std::sort ( 
+    numbers.begin(),
+    numbers.end(),
+    ???   // Strategie  // wie  
+);
+
+========================================
+
+Strategy:  Eine Methode durch einen Basisklassenzeiger einschleusen.
+
+C++: Geht anders // möglicherweise auch einfacher 
+
+std::function<>
+
+Eine Option, eine Methode (samt Objekt) in einer Variablen abzulegen.
+
+Funktor:  Aufrufbares Objekt:
+
+class X
+{
+     operator() ........
+}
+
+
+std::function: Ein Baustein von vielen anderen Bausteinen von Modern C++
+
+Strategie:   Austauschen von Funktionszeigern
+
+=============================================================
+
+Decorator:
+----------
+
+Hüllen-Pattern
+
+Was ist das Plus des Decorator-Patterns ???
+
+Hinzufügen neuen Verhaltens zu Objekten, 
+indem diese Objekte in speziellen Hüllen-Objekten platziert werden.
+
+Whyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyy
+
+a) Klassische Weg, um neues Verhalten zu Objekten hinzuzufügen:
+
+   Die Klasse ändern // 
+
+   Die Klasse spezialisieren:  
+
+   Neue Kind-Klasse, Methode überschreiben und hier das neue Verhalten hinzuzufügen.
+
+   Beobachtung:   Es gibt in C++ (Modern) das keyword 'final'
+
+   Man kann NICHT spezialisieren
+
+b) Einfacherer Weg ... und diesen zur Laufzeit.
+   
+
+// =================================================
+
+Legacy-Code:         Besucher  // Visitor
+
+Auch hier ist der Legacy-Code anzufassen - aber:  minimalistisch.
+
+// =================================================
+
+Prototype - Pattern
+-------------------
+
+Virtueller Konstruktor
+
+Erstelle eine Kopie eines Objekts durch einen Zeiger auf seinen Basistyp.
+
+Erstelle eine Kopie eines Objekts: ????????????????????????? Darum geht es hier nicht.
+
+Problem / Beispiel:
+
+Game-Programming:
+
+Figure* board[8][8];
+
+Figure:    Figure Basisklasse aller Schachfiguren.
+
+Bauer    // Pawn
+Turm     // Rook
+Königin  // Queen
+Läufer   // Bishop
+..
+
+Nächsten Zug: 
+
+Kopie des Bretts erstellen:
+
+
+Kopie von "Figure* board[8][8]";
+
+Hier würden Kopien von Adressen:
+
+Ich will auch die Figuren kopieren.
+
+Hmmm, welche Figur steht an board[0][0] ???????????
+
+   Pawn, Bishop, etc.
+
+   board[0][0] ->
+
+Problem:
+
+Erstelle eine Kopie eines Objekts
+durch einen Zeiger auf seinen Basistyp.
+
+Wie geht das ???
+
+"Virtueller Konstruktor"
+
+Lösung:
+
+Kovarianz   // nicht kovariant
+
+Was bedeutet das?
+
+Abgeleitete, virtuelle Methoden müssen kovariante Rückgabetypen haben. // ????
+
+
+===============================================================
+
+Wie passt clone zu SRP // Single Responsibility ???
+
+A) In der Tat: clone hat mit der eigentlichen Responsibility eher keinen Zusammenhang.
+
+B) Es geht nicht anders: Die clone-Methode muss in der Hiearchie angesiedelt sein.
+
+  is - a Beziehung.
+
+Einen zweiten Versuch:
+
+// eine Menge von Daten verwaltet
+// Responsibility
+class DataContainer : ICloneable, IEnumerable
+
+ICloneable Schnittstelle  ==> Nur wenn einen Klasse dieses Interface (Rolle, Responsibility)
+                 implementiert, können Kopien von Objekten dieser Klasse erstellt werden.
+
+                  ==> Nur wenn einen Klasse dieses Interface (Rolle, Responsibility)
+                 implementiert, können die Daten des Objekts einzeln der Reihe nach
+                 durchlaufen werden.
+
+                 begin(), end()  : Iteratoren-Konzept
+
+
+C++:  Lebenszyklus   //  Objektmodell
+
+Konstruktor, Destruktor
+operator=
+Kopierkonstruktor
+
+===========================================================
+
+Fabriken
+
+Factory
+
+== Simple Factory
+
+== Factory Method
+
+== Abstract Factory
+
+== Simple Factory:
+
+Erstellung von Objekten,
+ohne dem Client die Erstellungslogik zur Verfügung zu stellen.
+
+== Konstruktoren:
+
+   -- Wie heißt die Klasse ??? Wie ist der / sind die Konstruktoren definiert.
+
+Hmnmm, da könnte man anders denken:
+
+Fabrik:  "Buchung für einen von der Umsazusteuer befreiten Gegenstand"
+
+Wie identifiziere ich eine solche Buchung ???
+
+Simpel:
+
+"Zeichenkette"
+
+Aufzählungstyp: enum 
+
+// lesbare Konstanten,  symbolische Konstante
+
+enum Buchung
+{
+    BuchungMitUST,           // 0
+    BuchungOhneUST,          // 1
+    BuchungMitABschreibung,  // 2
+};
+
+
+
+Eine Fabrik besitzt meistens eine Klassenmethode:
+
+Was bewirkt das Schlüsselwort 'friend' ???
+
+Für alle "Freunde" gilt:
+
+Die 'private'_Member sind public:  Scharfes Schwert.
+
+Puristen (Theorie): Don't use friend:
+
+Praxis:  Wenn die Klasse der Begierde alles, was von Interesse ist,
+über geeignete getter / setter offen legt, dann brauche ich 'friend' nicht wirklich.
+
+Color red =  Color::FromArgb (255, 0, 0);
+
+Warum nicht so ?????????????????????????????
+
+Color red (255, 0, 0);
+
+Warum auch hier eine Fabrik-Methode ????
+
+Zweite Win-Situation:   Implizit ein Singleton.
+
+Wenn 100 mal Color red =  Color::FromArgb (255, 0, 0);
+
+aufgerufen wird: Es gibt  nur EIN Objekt mit diesen Werten.
+
+
+mutable  // veränderbar
+
+Immutable  // unveränderbar
+
+==========================================================
+
 

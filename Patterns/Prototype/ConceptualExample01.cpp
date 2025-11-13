@@ -29,7 +29,7 @@ namespace ConceptualExample01
 
         virtual ~Prototype() {}
         
-        virtual Prototype* clone() const = 0;
+        virtual Prototype* clone() const = 0;   // !!!!!!!!!  clone //  abstract
 
     public:
         int getId() const { return m_id; }
@@ -45,7 +45,7 @@ namespace ConceptualExample01
         // but 'virtual ConcretePrototype* clone()' compiles too
         Prototype* clone() const override
         {
-            return new ConcretePrototype{ *this };
+            return new ConcretePrototype{ *this };  // is-a:  ConcretePrototype is-a Prototype
         }
     };
 
@@ -74,7 +74,7 @@ namespace ConceptualExample02
         void setId(int id) { m_id = id; }
 
     public:
-        virtual std::shared_ptr<Prototype> clone() const = 0;
+        virtual std::shared_ptr<Prototype> clone() const = 0;   // std::shared_ptr<Prototype> statt Prototype*
     };
 
     class ConcretePrototype : public Prototype
@@ -87,7 +87,7 @@ namespace ConceptualExample02
         std::shared_ptr<Prototype> clone() const override
         {
             std::shared_ptr<Prototype> copy {
-                std::make_shared<ConcretePrototype>(getId()) 
+                std::make_shared<ConcretePrototype>(getId())   // is-a Prototype
             };
 
             return copy;

@@ -7,6 +7,15 @@
 #include <iostream>
 #include <cmath>
 #include <string>
+#include <vector>
+
+void test()
+{
+    std::vector<int> numbers;
+
+    std::vector<int>::iterator pos = numbers.begin();
+}
+
 
 namespace Factory01 {
 
