@@ -21,7 +21,7 @@ namespace PolicyBasedDesign_01 {
         explicit SmartPtr (T* ptr = nullptr) : m_ptr{ ptr } {}
 
         ~SmartPtr() {
-            delete m_ptr;
+            delete m_ptr;   // ?????????????????????????
         }
 
         // operators
@@ -45,8 +45,8 @@ namespace PolicyBasedDesign_01 {
 
     static void test_02() {
 
-        SmartPtr<int> sp1{ new int{ 123 } };
-        SmartPtr<int> sp2{ new int[5] { 1, 2, 3, 4, 5 } };
+        SmartPtr<int> sp1{ new int{ 123 } };  // EINE Var.
+        SmartPtr<int> sp2{ new int[5] { 1, 2, 3, 4, 5 } };  // FEld 
 
         // which delete is called?
         // Scalar Deleting Destructor or Vector Deleting Destructor?
@@ -68,15 +68,16 @@ namespace PolicyBasedDesign_02 {
     {
     private:
         T* m_ptr;
-        DeletionPolicy m_deletionPolicy;
+        DeletionPolicy m_deletionPolicy;  // Funktor // Funktionsobjekt // Aufrufbares ....
 
     public:
         // c'tor / d'tor
         explicit SmartPtr(T* ptr = nullptr, const DeletionPolicy& policy = DeletionPolicy{})
-            : m_ptr{ ptr }, m_deletionPolicy{ policy } {}
+            : m_ptr{ ptr },
+              m_deletionPolicy{ policy } {}
 
         ~SmartPtr() {
-            m_deletionPolicy(m_ptr);
+            m_deletionPolicy (m_ptr);
         }
 
         // operators
@@ -96,24 +97,36 @@ namespace PolicyBasedDesign_02 {
 
     template <typename T>
     struct ScalarDeletePolicy {
-        void operator()(T* ptr) const {
+        void operator() (T* ptr) const {
             delete ptr;
         }
     };
 
     template <typename T>
     struct VectorDeletePolicy {
-        void operator()(T* ptr) const {
+        void operator() (T* ptr) const {
             delete[] ptr;
         }
     };
 
+    void test_seminar()
+    {
+
+        // Was ist ein aufrufbares Objekt:
+        // Lambda ...
+        // klassisches: Eine Klasse, die den Operator () überlädt.
+
+        VectorDeletePolicy<int> obj;
+        int* ptr = new int[10];
+        obj(ptr);
+    }
+
     static void test()
     {
-        SmartPtr<Class, ScalarDeletePolicy<Class>> ptr(new Class{});
+     //   SmartPtr<Class, ScalarDeletePolicy<Class>> ptr(new Class{});
 
-        SmartPtr<int, ScalarDeletePolicy<int>> sp1{ new int{ 123 } };
-        SmartPtr<int, VectorDeletePolicy<int>> sp2{ new int[5] { 1, 2, 3, 4, 5 } };
+        SmartPtr<int, ScalarDeletePolicy<int>> sp1{ new int{ 123 } };  // EINE Var.
+        SmartPtr<int, VectorDeletePolicy<int>> sp2{ new int[5] { 1, 2, 3, 4, 5 } };  // Aay
     }
 }
 

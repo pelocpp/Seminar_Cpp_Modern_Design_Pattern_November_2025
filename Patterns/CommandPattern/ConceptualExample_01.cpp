@@ -72,6 +72,7 @@ namespace ConceptualExample01 {
     {
     private:
         std::shared_ptr<CommandBase> m_command;
+        // Warteschlange // Queue
 
     public:
         void setCommand(const std::shared_ptr<CommandBase>& command)

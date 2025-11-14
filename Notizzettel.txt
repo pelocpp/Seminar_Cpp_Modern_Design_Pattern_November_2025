@@ -4,6 +4,9 @@ Seminar "C++ Moderne Design Pattern"
 
 Peter Loos
 
+peter.loos@gmx.de
+-----------------
+
 Guten Morgen
 
 // ====================================
@@ -1000,3 +1003,389 @@ Beides "versteckt" Klassen im Hintergrund.
 
 
     =======================================
+
+    RAII Pattern
+
+    Was ist das Problem ???
+
+    Kein reines C++ Problem ...
+
+    Resources des unterlagerten Betriebssystems:
+
+    Socket, Mutex, SqlConnection, FILE, ....
+
+    == open, connect, attach, register, etc.
+    == close, disconnect, detach, unregister, etc.
+
+    Was ist das Problem: der 2. Aufruf kommt nicht
+
+    // vergessen, Exception, unerwarteter Ablauf if..else ...
+
+    Was ist denn das Fundament einer Resource:
+
+    OS: Tabellen: Wird pro "open" ein Eintrag (Slot) reserviert / vergeben.
+
+    2. Aufruf:
+
+    Idee: C++
+
+    Objekt:  
+       Konstruktor
+       Destruktor
+
+    Wann wird der Destruktor?
+
+    Ein Objekt befindet sich (meistens) in einem Block / Scope:
+
+    function()
+    {
+       while ()
+       {
+          Object o;
+
+          Socket s;
+          s.connect();
+
+          s.disconnect();   // darf nicht fehlen  
+       }  <== Destruktor von o 
+    }
+
+Beobachtung:  
+
+Socket, Mutex, SqlConnection, FILE, ....
+
+Idee: Die verwenden wir nicht DIREKT ...sondern indirekt
+      mit einem Hüllenobjekt.  // OO
+
+      Konstruktor  ==> "open"
+      Destruktor   ==> "close"
+
+new // delete  // Lösung: Smart-Pointer // ÄHNLICH: RAII
+
+Beispiel: fehlendes delete
+
+2 Anregungen:
+
+a) Mutex-Klassen
+
+std::mutex myMutex;
+
+Beispiel:
+
+// kritischen Abschnitt:
+
+myMutex.lock();
+
+// zugriff auf shared data
+if (unexpected) {
+    myMutex.unlock();   // das vergisst man häufig
+    break;
+}
+...
+
+myMutex.unlock();
+
+C++ Standard-Bibliothek:   std::lock_guard
+
+{
+    // myMutex.lock(); NICHT DIREKT VERWENDEN
+    std::lock_guard guard (myMutex);   // C'tor: myMutex.lock()
+    
+    // zugriff auf shared data
+    if (unexpected) {
+        break;
+    }
+    ...
+    
+    // myMutex.unlock();; NICHT DIREKT VERWENDEN // Fällt ganzu weg
+}   guard: Destruktor: myMutex.unlock()
+
+
+b) Beispiel:   Windows  Clipboard
+
+RAII:   Robustheit.
+
+=========================================================
+
+Beispiel:
+
+Problem:
+
+int* ptr = new int(123);   // EINE int-Variable
+int* ptr2 = new int[10];   // 10 int-Variablen
+
+delete  ptr;
+delete[] ptr2;
+
+Whyyyyyyyyyyyyyyyyyyyyyyyyyyy
+
+Person* ptr = new Person("Hans");   // EINE Person-Variable
+Person* ptr2 = new Person[10];   // 10 Person-Variablen
+                                 // 10 Konstruktoren-Aufrufe (Standard-Konstruktor)
+
+delete  ptr;                     // Destruktor
+delete[] ptr2;                   // 10 Destruktoren
+
+delete ptr2;                     // Was tut die ????
+                                 // a) Destruktor nur des ersten Objekts ???
+                                 // UB: Undefined Behaviour
+
+void (Person* persons)
+{
+   // wir arbeiten mit Personen
+
+   delete persons;
+   // oder
+   delete[] persons;
+
+   // Hier nicht lösbar !!!!!!!!!!!!!!
+}
+
+// ==========================================
+
+Simple Factory
+
+Pattern: Factory Method
+
+Fabrik Methode  ==> Template Method Pattern.
+
+// ==========================================
+
+Flyweight:
+
+Wenn es Probleme mit Speicher gibt ???
+
+==> Idee: habe ich VIEL Objekte mit denselben Daten:
+
+class Employee
+{
+    // Adresse // Nürnberg
+}
+
+Die Infos zu Nürnberg sind in vielen Objekten  ==> Redundant.
+
+Idee: Gemeinsame Dateien rausziehen  // raus faktorisieren //
+  an einer anderen Stelle unterbringen.
+
+// ==========================================
+
+Iterator:
+
+Wie kann man die Elemente eines "Containers" durchlaufen ???
+
+STL-Container: Iteratoren-Konzept  // begin(), end()
+
+Benutzerdef. Klasse:
+
+Nachimplementieren ...
+
+// ==========================================
+
+struct X
+{
+    float       a;
+    int         b;
+    double      c;
+    std::string d;
+}
+
+Nope: 
+
+C# / Java:  Reflection-API  // C++ 26
+
+Iterieren:  Daten, die viele Elemente DESSELBEN Typs verwalten.
+
+==============================
+
+Mediator:
+--------
+
+Wenn Klassen KEINE Verbindung haben:
+
+Dann kann man neue, zusätzliche Klassen dazwischen schalten:
+
+==> gerufen werden // Folge: anderen Klassen rufen
+
+Chatroom: 
+
+==> Eine Nachricht hingesendet ...
+
+    diese wird an andere Clients weitergesendet ...
+
+==============================
+
+Memento:   Schnappschuss.
+
+Hier werden von einem Objekt die Zustandsvariablen
+in einem "Schnappschuss"-Objekt abgelegt.
+
+a) Rollback:   
+
+   Bank-Konto:
+
+   Man könnte den Zustand eines Bank-Konto Objekts mit einem Schnappschuss
+   rücksetzen.
+
+
+b) Redo // Undo - Funktionalität.
+
+========================================
+
+Abstract Factory:
+
+Java Look & Feel umschalten ...
+
+
+=========================================
+
+Kommando-Pattern:
+
+Command Pattern:
+
+Ursprung:
+
+Sensorik:  Ereignis über eine Sensorik rein.
+
+  ==> Man müsste eine Verarbeitung in die Wege leiten: obj.method();
+
+Kommando - Pattern:
+
+Einen Methodenaufruf "zwischenspeichern" / in SW ablegen,
+zu einem späteren Zeitpunkt ausführen.
+
+Firmware:   ASR:   Asynchrone Service Routinen.
+
+            Queue was ablegen.
+
+// Online Banking
+
+Abheben / einzahlen.
+
+============================================================
+
+Verschieben von Aktivitäten in eine Queue,
+um diese zu einem späteren Zeitpunkt auszuführen:
+
+Probate Mittel: Ereigniswarteschlange
+
+https://github.com/pelocpp/cpp_concurrency/blob/master/Programs/33_EventLoop/Readme.md
+
+oder auch
+
+https://habr.com/en/articles/665730/
+
+Realisierung einer Ereigniswarteschlange (Event Loop )
+
+std::condition_variable:  wait und notify.
+
+===============================================
+
+Visitor
+=======
+
+Legacy-Code
+
+Neue Funktionalität
+
+Ansatz, den bestehenden Code so wenig wie möglich anzufassen.
+
+Ein Beispiel:
+
+Dokumentenformate:
+
+HTML
+MarkDown
+
+Listen zu formulieren
+
+HTML:
+
+<li>
+  <item> sdf fds dfs </item> 
+</li>
+
+Markdown:
+
+  * sdf sdf dfs fsd
+
+
+addToList:
+
+<li>
+  <item> sdf fds dfs </item> 
+  <item> eine zweite Zeile </item> 
+
+</li>
+
+Markdown:
+
+  * sdf sdf dfs fsd
+  * eine zweite Zeile
+
+Wie funktioniert das Visitor-Pattern 
+an einer vorhandenen Hierarchie von Klassen:
+
+Hierarchie von Klassen:   Basisklasse // Interface.
+
+Hier machen wir einen kleinen Türöffner rein:
+
+Mit einer accept Methode.
+
+Double Dispatch:
+
+Virtuelle Methode: indirekter Methodenaufruf
+
+2 virtuelle Aufrufe geschachtelt.
+
+===========================================================
+
+Visitor ganz anders ...
+
+Vererbung // Virtuelle Methoden
+
+C++: Alternativen Ansatz.
+
+C++ 17 
+
+std::variant
+
+Ist eine Utility-Klasse:
+
+Diese kann Daten unteschiedlichen Typs aufnehmen:
+
+Zu einem Zeitpunkt aber nur EIN Datum.
+
+Excel // Google Sheets Dokument:
+
+Zelle // Cell:   Formatierung
+
+== num. Werte
+== Zeichenketten
+== Währung
+== Datum
+== ....
+
+std::variant <int, double, std::time, ..., uchar [4]> cell;
+
+Wo ist der Unterschied zu einer union:
+
+union:  Legt die Werte übereinanden
+
+std::variant  ===> besuchen  :  std::visit
+
+=================================================
+
+Composite:
+==========
+
+Verbund
+
+
+class Circle : public IShape 
+
+   Ist verständlich.
+
+class Group : public IShape
+
+   Hmm: eine Gruppe ist-eine (is-a) Shape
+

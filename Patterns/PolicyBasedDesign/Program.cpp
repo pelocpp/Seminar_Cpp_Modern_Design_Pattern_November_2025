@@ -8,8 +8,16 @@ void test_conceptual_example_02();
 void test_conceptual_example_10();
 void test_conceptual_example_11();
 
+namespace PolicyBasedDesign_02
+{
+    void test_seminar();
+}
+
+
 int main()
 {
+    PolicyBasedDesign_02::test_seminar();
+    
     test_conceptual_example_01();
     test_conceptual_example_02();
     test_conceptual_example_10();

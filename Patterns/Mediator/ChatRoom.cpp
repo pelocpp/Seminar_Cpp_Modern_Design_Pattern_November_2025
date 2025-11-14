@@ -20,7 +20,8 @@ namespace ChatRoomMediatorPattern
     class PersonBase                          // ColleagueBase
     {
     protected:
-        std::weak_ptr<ChatRoomBase> m_room;
+        std::weak_ptr<ChatRoomBase> m_room;  // Mediator // shared_ptr
+        ChatRoomBase*               m_room2;
 
     public:
         PersonBase() {};
@@ -50,6 +51,7 @@ namespace ChatRoomMediatorPattern
     // -----------------------------------------------------------------------
 
     // Concrete Mediator
+    // Curios: CRTP 
     class ChatRoom : public ChatRoomBase, public std::enable_shared_from_this<ChatRoom>
     {
     private:
@@ -104,7 +106,11 @@ namespace ChatRoomMediatorPattern
 
     void ChatRoom::join(const std::shared_ptr<Person>& person) {
         // add person to chat room
+
         person->setRoom(shared_from_this());
+
+       // person->setRoom( this );   // um es einfach auszudrücken
+
         m_people.push_back(person);
 
         // inform all chat room members - including the current one - about a new member
@@ -148,6 +154,9 @@ void test_chatroom_example()
     std::shared_ptr<Person> jane{ std::make_shared<Person>("Jane") };
 
     // mediator
+
+    // ChatRoom* cr = new ChatRoom();  // std::shared_ptr
+
     std::shared_ptr<ChatRoom> room{ std::make_shared<ChatRoom>() };
 
     // join colleagues with mediator

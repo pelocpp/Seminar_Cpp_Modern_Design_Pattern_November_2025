@@ -242,7 +242,7 @@ namespace ChessExample {
         game.enqueue(tower, Position{ 4, 1 });
         game.enqueue(tower, Position{ 6, 1 });
 
-        game.play();
+        game.play();   // Invoker
 
         game.undo();
         game.undo();

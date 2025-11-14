@@ -9,7 +9,8 @@
 namespace RAIIDemo {
 
     template <class TFinalizer>
-    class RAII {
+    class RAII
+    {
     public:
         // c'tor
         explicit RAII(TFinalizer finalizer)
@@ -37,8 +38,9 @@ namespace RAIIDemo {
                 return;
             }
 
-            RAII raii{ [&] () { delete ptr; } };
-        }
+            auto deleter = [&]() { delete ptr; };
+            RAII raii(deleter);  // c'tor  
+        }                        // d'tor
 
         std::cout << "Done." << std::endl;
     }

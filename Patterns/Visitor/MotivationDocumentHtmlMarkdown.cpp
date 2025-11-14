@@ -329,6 +329,9 @@ namespace MotivationVisitor_05_Modern_Cpp
     };
 
     /* ------ Specific Printer Visitor Class -------- */
+
+    // Aufrufbares Objekt // operator()  // überladen
+
     class DocumentPrinter
     {
     public:
@@ -351,6 +354,7 @@ namespace MotivationVisitor_05_Modern_Cpp
     static void clientCode05() {
         HTML hd;
         hd.addToList("This is line");
+
         std::variant<Markdown, HTML> doc = hd;
         DocumentPrinter dp;
         std::visit(dp, doc);
