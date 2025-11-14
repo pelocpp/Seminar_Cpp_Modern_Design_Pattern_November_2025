@@ -819,3 +819,184 @@ Immutable  // unveränderbar
 ==========================================================
 
 
+SW kann aus Schichten bestehen
+
+== Low-Level Schichten // Änderung
+
+== High-Level Schichten
+
+Die beiden Schichten hängen zusammen
+
+Es gibt so etwas wie eine Integrität: Änderungen an der SCHNITTSTELLE des  Low-Level Moduls
+                                      sind tabu.
+
+                                      Die Innereien sind davon nicht betroffen.
+
+
+
+Integrität: Wie --- Mit einer Schnitstelle.
+
+// ============================================================
+
+Performanz:
+
+-- Thread-Pool:  Aufgaben /  Funktionen: Parallel
+
+   Verschiedene Aufgaben // Funktionen hantieren.
+
+   Berechnung: Einmal die Daten holt  ... alles lokal berechnen
+
+Bemerkung: Thread laufen parallel
+
+           // gemeinsame Daten ... Synchronisiert ... Mutex  .. 
+           // Zwangsserialisierung
+
+-- Nachrichtenwarteschlange // Ereigniswarteschlange:
+
+                  Aufgaben /  Funktionen:  Sequentiell.
+
+
+-- Object-Pool:  Optimierung für Objekte derselben Größe (Point, ...)  // Fixed-Size Objekt
+
+                 new / delete
+                 
+                 Vorhandene Pool: Freispeicherverwaltung.
+
+Singleton.
+
+Optimierung:
+
+Double-Checked Locking / Doppelt überprüfte Sperrung:
+
+    m_mutex.lock();   // zuerst lock // teuer // langsam
+    
+    if (m_instance == nullptr) {
+        m_instance = new Singleton{};
+    }
+    
+    m_mutex.unlock();
+
+
+Trick:
+
+    Singleton* Singleton::getInstanceEx(const std::string& value)
+    {
+        // 95%: KEIN nullptr  // Lesenden Zugriff
+        if (m_instance == nullptr)  // Wo ist hier die Sperre ??
+        {
+            std::lock_guard<std::mutex> lock{ m_mutex }; // Sperre
+            if (m_instance == nullptr)  // <=== NOTE: double-check of m_instance being nullptr
+            {
+                m_instance = new Singleton{ value };
+            }
+        }
+
+        return m_instance;
+    }
+
+====================================================
+
+Observer
+--------
+
+Klassisches Problem:
+
+Ein Objekt, das Zustände hat, die sich ändern
+und für die man sich interessiert:
+
+Aktien-Objekt: ==> Kurswert ==> Änderungen.
+
+Wetter-Daten: ==>  Für viele Regionen ==> Änderungen.
+
+Client: Die sich für Änderungen interessieren.
+
+Benachrichtigen lässt .... Callback ...
+
+Ad hoc Lösung: Aufgehübscht:   Observer - Pattern
+
+Nomenklatur:
+
+Ein Objekt, das Zustände hat:
+
+    Subject, Event Source, Observable
+
+Interessierten für Änderungen am Subject:
+
+    Observer, Event Client, Client
+
+Anmerkung:
+==========
+
+Man könnte auch ohne das Interface IObserver
+
+    class IObserver {
+    public:
+        virtual ~IObserver() {};
+
+        virtual void update(const std::string& messageFromSubject) = 0;
+
+        //virtual void update() = 0;
+        //virtual void ping() = 0;
+
+    };
+
+auskommen:
+
+Alternativ:
+-----------
+
+Subject:  Die Observer via std::function Objekte:
+
+std::function < void (const std::string&) > einObserver;
+
+std::list< std::function < void (const std::string&) >  > m_observers;
+
+============
+
+============================================================
+
+Das "einfachste" Pattern:
+
+===> Fremd-Bibliothek   // uhhh, Schnittstelle schwer verständlich / komplex
+
+===> Legacy-Code:   // uhhhhh, brauche ich, will ihn aber nicht anfassen ....
+
+==> "Da schreiben wir mal ne Schicht drum rum":   Facade 
+
+// Performanz ...
+
+Beispiel:
+
+Thread-Pool:  Win32 Thread Pool API
+
+Da ist ein Beispiel einer komplexen Bibliothek.
+
+
+
+Facade:
+
+Adapter:
+
+Beides "versteckt" Klassen im Hintergrund.
+
+==> Adapter: Die Klasse(n) brauche ich;
+    Sie haben inkompatible Schnittstellen
+    Es erfolgt auf irgendeine Weise eine Umsetzung von Daten
+    (( vorher // nacher // beiden ))
+
+==> Facade:
+    Eine Dritt-Bibliothek // Ansammlung von Klassen // existiert.
+    Sie ist komplex // umfangreich .
+    Eine Vereinfachung wäre hilfreich.
+
+    Weitere Anwendung: Dritt-Bibliothek  ist eine C-Bibliothek.
+    Gewünscht wäre eine C++-Bibliotek // Objekt-Orientierung.
+
+    Beispiel:  CreateWindow.
+
+    Was ist eine bekannte OO Facade der Win32 Systembibliothek ??
+
+    .NET Klassenbibliothek // Kein C++  // C#
+
+
+    =======================================

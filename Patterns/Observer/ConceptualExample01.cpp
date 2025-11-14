@@ -25,6 +25,10 @@ namespace ObserverDesignPatternClassic {
         virtual ~IObserver() {};
 
         virtual void update(const std::string& messageFromSubject) = 0;
+
+        //virtual void update() = 0;
+        //virtual void ping() = 0;
+
     };
 
     class ISubject {
@@ -44,7 +48,7 @@ namespace ObserverDesignPatternClassic {
 
     class Subject : public ISubject {
     private:
-        std::list<IObserver*> m_observers;
+        std::list<IObserver*> m_observers;  //  STL:  std::list
         std::string           m_message;
 
     public:

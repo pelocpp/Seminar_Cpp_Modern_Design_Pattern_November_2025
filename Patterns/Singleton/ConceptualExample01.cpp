@@ -17,8 +17,11 @@ namespace ConceptualExample01 {
     private:
         Singleton() = default;
 
+        // Modern C++:
+        // Man verbietet Kopieren und Verschieben
         Singleton(const Singleton&) = delete;
         Singleton(Singleton&&) noexcept = delete;
+
         Singleton& operator=(const Singleton&) = delete;
         Singleton& operator=(Singleton&&) noexcept = delete;
 
@@ -26,7 +29,7 @@ namespace ConceptualExample01 {
         static Singleton* getInstance()
         {
             if (m_instance == nullptr) {
-                m_instance = new Singleton{};
+                m_instance = new Singleton{};  // Heap
             }
 
             return m_instance;
@@ -34,11 +37,22 @@ namespace ConceptualExample01 {
 
         static Singleton* getInstanceThreadSafe()
         {
-            {
+            {   // RAII
                 std::lock_guard<std::mutex> lock{ m_mutex };
+
                 if (m_instance == nullptr) {
                     m_instance = new Singleton{};
                 }
+            }
+
+            {   // klassisch 
+                m_mutex.lock();
+
+                if (m_instance == nullptr) {
+                    m_instance = new Singleton{};
+                }
+
+                m_mutex.unlock();
             }
 
             return m_instance;
